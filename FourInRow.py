@@ -1,6 +1,7 @@
 import numpy as np
 import datetime
 from RandomPlayer import RandomPlayer
+from ManualPlayer import ManualPlayer
 from termcolor import colored
 from MCTSPlayer import MCTSPlayer
 
