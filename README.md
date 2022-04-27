@@ -23,3 +23,5 @@ pip install -r requirements.txt
 Execute o FourInRow.py e você deve conseguir jogar contra o agente.
 
 ## Lógica do Agente
+
+O agente desenvolvido utiliza um algoritmo de busca em uma árvore construída a partir do algoritmo de Monte Carlo, chamado Monte Carlo Tree Search (MCTS), que ganhou notoriedade depois de ter sido implementado no modelo AlphaGo Zero da Google que derrotou o então campeão mundial de Go em 2016 e um artigo para entender como isso foi feito pode ser lido [aqui](https://jonathan-hui.medium.com/monte-carlo-tree-search-mcts-in-alphago-zero-8a403588276a).
