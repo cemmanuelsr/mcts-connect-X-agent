@@ -1,0 +1,6 @@
+pytest
+networkx
+gym
+pygame
+termcolor
+
