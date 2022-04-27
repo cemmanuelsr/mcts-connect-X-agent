@@ -7,7 +7,7 @@ from utils import *
 class State:
     # Estado do nó da árvore de busca de Monte Carlo
     
-    def __init__(self, board, player_code, rows=ROWS, columns=COLUMNS, condition=CONNECT_X-1, parent=None, final=False, final_score=None, action=None, column=None):
+    def __init__(self, board, player_code, rows=ROWS, columns=COLUMNS, condition=CONNECT_X-1, parent=None, final=False, final_score=None, action=None, column=None, popout=True):
         self.board = board.copy()
         self.player_code = player_code
         self.rows = rows
@@ -25,6 +25,7 @@ class State:
         self.final_score = final_score
         self.action = action
         self.column = column
+        self.popout = popout
 
     def check_expand(self):
         # função para checar se podemos continuar em um caminho da árvore
@@ -33,7 +34,7 @@ class State:
     def simulate(self):
         if self.final:
             return self.final_score
-        return opponent_score(rule_for_simulation(self.board, self.player_code, self.rows, self.columns, self.condition))
+        return opponent_score(rule_for_simulation(self.board, self.player_code, self.rows, self.columns, self.condition, self.popout))
 
     def backpropagate(self, simulation_score):
         self.total_score += simulation_score
@@ -48,7 +49,7 @@ class State:
         action, column = choice
         child_board = self.board.copy()
         if action == 'put':
-            put_in(child_board, column, self.player_code, self.rows, self.columns)
+            put_in(child_board, column, self.player_code, self.rows)
         if action == 'pop':
             pop_out(child_board, column, self.player_code, self.rows)
 
@@ -57,7 +58,7 @@ class State:
                                    opponent_code(self.player_code), 
                                    self.rows, self.columns, self.condition, 
                                    parent=self, final=final, final_score=score, 
-                                   action=action, column=column
+                                   action=action, column=column, popout=self.popout
                                    ))
 
         simulation_score = self.children[-1].simulate()

@@ -44,12 +44,35 @@ O algoritmo consiste fundamentalmente de quatro etapas:
 
 - Seleção: nessa etapa o algoritmo seleciona o nó mais promissor a partir da raiz da árvore
 - Expansão: nessa etapa o algoritmo expande o nó escolhido através de mais movimentos aleatórios
-- Simulação: nessa etapa o algoritmo simula o destino da partida a partir dos nós gerados pela expansão através de uma regra chamada *policy* que é o que adiciona "inteligência" ao algoritmo. Nessa implementação a *policy* usada será a Upper Confidence Trees (UCT), uma função de seleção baseada no número de nós visitados e o score do nó atual e o formalismo matemático será deixado para as referências
+- Simulação: nessa etapa o algoritmo simula o destino da partida a partir dos nós gerados pela expansão através de uma regra chamada *policy* que é o que adiciona "inteligência" ao algoritmo. Nessa implementação a *policy* usada será a Upper Confidence Trees (UCT), uma função de seleção baseada no número de nós visitados e o score do nó atual e o formalismo matemático será deixado para as [referências](#referências)
 - Atualização: através de um algoritmo de *backpropagate*, todos os nós no caminho entre o nó final e a raiz são atualizados com um novo valor para a *policy*
 
 E repetimos isso até achar um nó vencedor, a imagem abaixo representa bem esse processo:
 
 ![Etapas do MCTS](src/img/mcts-algorithm.png)
+
+## Validação
+Como seria preciso criar outros agentes inteligentes para o jogo para poder validar, será usada uma *proxy* de uma validação do agente jogando o Connect Four regular contra os agentes do ambiente de competição do Kaggle que consiste de um agente randômico e um agente inteligente utilizando um algoritmo de decisão negamax.
+
+A validação pode ser feita executando o arquivo test.py e é esperado o seguinte resultado:
+
+```
+Simulation outcomes for 100 played games between Carlos Monteiro x Random
+Carlos Monteiro win rate: 0.98
+Carlos Monteiro loss rate: 0.0
+Draw rate: 0.02
+Number of Invalid Plays by Carlos Monteiro: 0
+Number of Invalid Plays by Random: 0
+
+Simulation outcomes for 100 played games between Carlos Monteiro x Negamax
+Carlos Monteiro win rate: 0.87
+Carlos Monteiro loss rate: 0.01
+Draw rate: 0.12
+Number of Invalid Plays by Carlos Monteiro: 0
+Number of Invalid Plays by Negamax: 0
+```
+
+**E isso deve demorar da ordem de algums horas, então não rodar por um motivo qualquer.**
 
 ## Referências
 
@@ -58,6 +81,7 @@ E repetimos isso até achar um nó vencedor, a imagem abaixo representa bem esse
 - [Referência mais didática a MCTS](https://towardsdatascience.com/monte-carlo-tree-search-an-introduction-503d8c04e168)
 - [Mais sobre MCTS e UCT](https://medium.com/@quasimik/monte-carlo-tree-search-applied-to-letterpress-34f41c86e238)
 - [Implementação de MCTS para Connect Four regular, adaptados trechos como cálculo do UCT e nós da árvore](https://www.kaggle.com/code/matant/monte-carlo-tree-search-connectx/notebook)
+- [Ambiente competitivo Kaggle](https://pypi.org/project/kaggle-environments/)
 
 ----
 
@@ -77,7 +101,7 @@ E repetimos isso até achar um nó vencedor, a imagem abaixo representa bem esse
 
 4. **Qual a sua expectativa com relação ao desempenho do seu agente? Você acredita que ele irá desempenhar bem na competição? Por que? Você executou testes contra outros jogadores? Qual foram os resultados?**
 
-**Re.:** Pendente
+**Re.:** Coberto na [validação](#validação).
 
 5. **Quais foram as principais referências utilizadas para a implementação do seu jogador?**
 
@@ -85,4 +109,4 @@ E repetimos isso até achar um nó vencedor, a imagem abaixo representa bem esse
 
 6. **Existem diferenças significativas entre um jogador de Connect4 e um jogador de Connect4 PopOut em termos de árvore de busca e função de avaliação? É possível utilizar o jogador implementado para o Connect4 PopOut em competições de Connect4 sem muitas modificações?**
 
-**Re.:** Pendente
+**Re.:** Não existem diferenças significativas além do comprimento da árvore de busca já que a árvore de busca para o Connect Four regular tem coeficiente de bifurcação limitado superiormente por 7 e o Connect Four PopOut é limitado superiormente por 13, as sete colunas regulares e mais seis opções de pop que é o máximo possível de colocar na linha mais de baixo sem ganhar a partida. Como visto na [validação](#validação), não é difícil adaptar e isso foi feito para gerar a mesma.

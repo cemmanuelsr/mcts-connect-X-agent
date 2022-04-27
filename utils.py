@@ -8,7 +8,7 @@ from constants import *
 def column_is_full(board, column, rows=ROWS):
     return sum([1 for row in range(rows) if board[row, column] != 0]) == rows
 
-def put_in(board, column, player_code, rows=ROWS, columns=COLUMNS):
+def put_in(board, column, player_code, rows=ROWS):
     if not(column_is_full(board, column, rows)):
         row = max([i for i in range(rows) if board[:, column][i] == 0])
         board[row, column] = player_code
@@ -52,7 +52,15 @@ def check_winner(board, column, player_code, rows=ROWS, columns=COLUMNS, conditi
     except:
         return False
 
-def check_final_and_get_score(board, column, player_code, rows=ROWS, columns=COLUMNS, condition=CONNECT_X - 1):
+def check_tie(board):
+    return (0 in board)
+
+def check_final_and_get_score(board, column, player_code, rows=ROWS, columns=COLUMNS, condition=CONNECT_X - 1, popout=True):
+
+    if not(popout):
+        if check_tie(board):
+            return True, 0.5
+
     if check_winner(board, column, player_code, rows, columns, condition):
         return True, 1
     return False, None
@@ -75,7 +83,7 @@ def random_move(board, player_code, drop, rows=ROWS, columns=COLUMNS):
     if drop:
         try:
             column = random_put_in(board, columns)
-            action = put_in(board, column, player_code, rows, columns)
+            action = put_in(board, column, player_code, rows)
         except:
             column = random_pop_out(board, player_code, columns)
             action = pop_out(board, column, player_code, rows)
@@ -85,21 +93,34 @@ def random_move(board, player_code, drop, rows=ROWS, columns=COLUMNS):
             action = pop_out(board, column, player_code, rows)
         except:
             column = random_put_in(board, columns)
-            action = put_in(board, column, player_code, rows, columns)
+            action = put_in(board, column, player_code, rows)
 
     return action, column
 
-def rule_for_simulation(board, player_code, rows=ROWS, columns=COLUMNS, condition=CONNECT_X - 1):
+def random_move_without_popout(board, player_code, rows=ROWS, columns=COLUMNS):
+    column = random_put_in(board, columns)
+    action = put_in(board, column, player_code, rows)
+
+    return action, column
+
+
+def rule_for_simulation(board, player_code, rows=ROWS, columns=COLUMNS, condition=CONNECT_X - 1, popout=True):
     # simula um jogo aleatorio
     initial_player_code = player_code
     board = board.copy()
-    _, column = random_move(board, player_code, drop=1, rows=rows, columns=columns)
-    final, score = check_final_and_get_score(board, column, player_code, rows, columns, condition)
+    if popout:
+        _, column = random_move(board, player_code, drop=1, rows=rows, columns=columns)
+    else:
+        _, column = random_move_without_popout(board, player_code, rows=rows, columns=columns)
+    final, score = check_final_and_get_score(board, column, player_code, rows, columns, condition, popout)
 
     while not final:
         player_code = opponent_code(player_code)
-        _, column = random_move(board, player_code, drop=random.randint(0,1), rows=rows, columns=columns)
-        final, score = check_final_and_get_score(board, column, player_code, rows, columns, condition)
+        if popout:
+            _, column = random_move(board, player_code, drop=random.randint(0,1), rows=rows, columns=columns)
+        else:
+            _, column = random_move_without_popout(board, player_code, rows=rows, columns=columns)
+        final, score = check_final_and_get_score(board, column, player_code, rows, columns, condition, popout)
 
     if initial_player_code == player_code:
         return score

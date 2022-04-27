@@ -3,4 +3,5 @@ networkx
 gym
 pygame
 termcolor
+kaggle-environments>=0.1.6
 
