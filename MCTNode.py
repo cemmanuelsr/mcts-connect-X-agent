@@ -7,7 +7,7 @@ from utils import *
 class State:
     # Estado do nó da árvore de busca de Monte Carlo
     
-    def __init__(self, board, player_code, rows=ROWS, columns=COLUMNS, condition=CONNECT_X-1, parent=None, final=False, final_score=None, action=None, column=None, popout=True):
+    def __init__(self, board, player_code, rows=ROWS, columns=COLUMNS, condition=CONNECT_X-1, parent=None, final=False, final_score=None, action=None, column=None, popout=True, cp=CP):
         self.board = board.copy()
         self.player_code = player_code
         self.rows = rows
@@ -26,6 +26,7 @@ class State:
         self.action = action
         self.column = column
         self.popout = popout
+        self.cp = cp
 
     def check_expand(self):
         # função para checar se podemos continuar em um caminho da árvore
@@ -65,8 +66,8 @@ class State:
         self.children[-1].backpropagate(simulation_score)
         self.moves_after_expand.remove(choice)
 
-    def best_child(self, cp=CP):
-        children_uct_scores = [UCT(child.total_score, child.total_visits, self.total_visits, cp) for child in self.children]
+    def best_child(self):
+        children_uct_scores = [UCT(child.total_score, child.total_visits, self.total_visits, self.cp) for child in self.children]
         max_child_uct_score = max(children_uct_scores)
 
         best_child = children_uct_scores.index(max_child_uct_score)
@@ -93,4 +94,4 @@ class State:
         if self.check_expand():
             self.expand_and_simulate()
             return
-        self.best_child(CP).run_tree()
+        self.best_child().run_tree()

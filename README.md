@@ -49,7 +49,7 @@ O algoritmo consiste fundamentalmente de quatro etapas:
 
 E repetimos isso até achar um nó vencedor, a imagem abaixo representa bem esse processo:
 
-![Etapas do MCTS](src/img/mcts-algorithm.png)
+![Etapas do MCTS](src/imgs/mcts-algorithm.png)
 
 ## Validação
 Como seria preciso criar outros agentes inteligentes para o jogo para poder validar, será usada uma *proxy* de uma validação do agente jogando o Connect Four regular contra os agentes do ambiente de competição do Kaggle que consiste de um agente randômico e um agente inteligente utilizando um algoritmo de decisão negamax.

@@ -2,10 +2,15 @@ from FourInRow import FourInRow
 from RandomPlayer import RandomPlayer
 from MCTSPlayer import MCTSPlayer
 
-players = [
-    RandomPlayer(),
-    MCTSPlayer()]
-    
+cps = [0.5, 1, 2]
+timeouts = [2, 5, 8]
+
+players = [RandomPlayer()]
+
+for cp in cps:
+    for timeout in timeouts:
+        players.append(MCTSPlayer(timeout, cp))
+
 points = {}
 for p in players:
     points[p.name()] = 0

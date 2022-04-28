@@ -163,7 +163,7 @@ class FourInRow:
             return 'DRAW'
 
 def main():
-    FourInRow(MCTSPlayer(), ManualPlayer()).game()
+    FourInRow(MCTSPlayer(5, 0.5), MCTSPlayer(8, 2)).game()
     #FourInRow(RandomPlayer(), RandomPlayer()).game()
 
 if __name__ == '__main__':
